@@ -13,7 +13,7 @@
     {{-- Navbar --}}
     <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
         <h1 class="text-xl font-bold text-indigo-600">TokoKu</h1>
-        <div class="flex gap-4">
+        <div class="flex gap-4 items-center">
             @auth
                 <span class="text-gray-600">Halo, {{ auth()->user()->name }}</span>
                 <a href="{{ route('dashboard') }}" class="text-indigo-600 hover:underline">Dashboard</a>
@@ -48,7 +48,8 @@
         @else
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 @foreach ($products as $product)
-                    <div class="bg-white rounded-xl shadow hover:shadow-md transition p-4">
+                    <a href="{{ route('product.show', $product->id) }}"
+                        class="bg-white rounded-xl shadow hover:shadow-md transition p-4 block">
                         <div class="bg-gray-200 rounded-lg h-40 mb-3 flex items-center justify-center">
                             <span class="text-gray-400 text-sm">No Image</span>
                         </div>
@@ -56,7 +57,7 @@
                         <p class="text-indigo-600 font-bold mt-1">Rp {{ number_format($product->price, 0, ',', '.') }}
                         </p>
                         <p class="text-gray-400 text-xs mt-1">Stok: {{ $product->stock }}</p>
-                    </div>
+                    </a>
                 @endforeach
             </div>
         @endif
