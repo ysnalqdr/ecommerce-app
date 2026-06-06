@@ -2,11 +2,12 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\SellerRegistrationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Seller\SellerController;
+use App\Http\Controllers\Seller\ProductController as SellerProductController;
 use Illuminate\Support\Facades\Route;
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -41,6 +42,18 @@ use Illuminate\Support\Facades\Route;
     // Seller Routes
     Route::middleware(['auth', 'seller'])->prefix('seller')->name('seller.')->group(function () {
     Route::get('/dashboard', [SellerController::class, 'dashboard'])->name('dashboard');
+});
+
+    // Seller Routes
+    Route::middleware(['auth', 'seller'])->prefix('seller')->name('seller.')->group(function () {
+    Route::get('/dashboard', [SellerController::class, 'dashboard'])->name('dashboard');
+    
+    // Product CRUD
+    Route::get('/products/create', [SellerProductController::class, 'create'])->name('products.create');
+    Route::post('/products', [SellerProductController::class, 'store'])->name('products.store');
+    Route::get('/products/{id}/edit', [SellerProductController::class, 'edit'])->name('products.edit');
+    Route::put('/products/{id}', [SellerProductController::class, 'update'])->name('products.update');
+    Route::delete('/products/{id}', [SellerProductController::class, 'destroy'])->name('products.destroy');
 });
 
 require __DIR__ . '/auth.php';

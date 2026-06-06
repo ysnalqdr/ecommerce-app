@@ -44,8 +44,9 @@
         <div class="bg-white rounded-xl shadow p-6">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-bold text-gray-800">Produk Kamu</h3>
-                <a href="#" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700">+
-                    Tambah Produk</a>
+                <a href="{{ route('seller.products.create') }}"
+                    class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700">+ Tambah
+                    Produk</a>
             </div>
 
             @if ($products->isEmpty())
@@ -69,8 +70,14 @@
                                 <td class="py-3">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
                                 <td class="py-3">{{ $product->stock }}</td>
                                 <td class="py-3 flex gap-2">
-                                    <a href="#" class="text-indigo-600 hover:underline">Edit</a>
-                                    <a href="#" class="text-red-500 hover:underline">Hapus</a>
+                                    <a href="{{ route('seller.products.edit', $product->id) }}"
+                                        class="text-indigo-600 hover:underline">Edit</a>
+                                    <form method="POST" action="{{ route('seller.products.destroy', $product->id) }}"
+                                        onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:underline">Hapus</button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach

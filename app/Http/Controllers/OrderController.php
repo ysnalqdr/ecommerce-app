@@ -72,7 +72,7 @@ class OrderController extends Controller
 
             CartItem::where('user_id', Auth::id())->delete();
         });
-
+        
         return redirect()->route('order.payment', $order->id);
     }
 

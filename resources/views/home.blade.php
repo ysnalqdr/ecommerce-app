@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Facades\Storage; @endphp
 <!DOCTYPE html>
 <html lang="id">
 
@@ -50,8 +51,15 @@
                 @foreach ($products as $product)
                     <a href="{{ route('product.show', $product->id) }}"
                         class="bg-white rounded-xl shadow hover:shadow-md transition p-4 block">
-                        <div class="bg-gray-200 rounded-lg h-40 mb-3 flex items-center justify-center">
-                            <span class="text-gray-400 text-sm">No Image</span>
+                        <div class="rounded-lg h-40 mb-3 overflow-hidden bg-gray-200">
+                            @if ($product->primaryImage)
+                                <img src="{{ Storage::url($product->primaryImage->image_url) }}"
+                                    class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center">
+                                    <span class="text-gray-400 text-sm">No Image</span>
+                                </div>
+                            @endif
                         </div>
                         <h4 class="font-semibold text-gray-800 truncate">{{ $product->name }}</h4>
                         <p class="text-indigo-600 font-bold mt-1">Rp {{ number_format($product->price, 0, ',', '.') }}

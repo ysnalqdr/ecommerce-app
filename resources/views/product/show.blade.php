@@ -36,8 +36,16 @@
 
             {{-- Gambar Produk --}}
             <div class="w-full md:w-1/2">
-                <div class="bg-gray-200 rounded-xl h-72 flex items-center justify-center">
-                    <span class="text-gray-400">No Image</span>
+                @php use Illuminate\Support\Facades\Storage; @endphp
+                <div class="rounded-xl h-72 overflow-hidden bg-gray-200">
+                    @if ($product->primaryImage)
+                        <img src="{{ Storage::url($product->primaryImage->image_url) }}"
+                            class="w-full h-full object-cover">
+                    @else
+                        <div class="w-full h-full flex items-center justify-center">
+                            <span class="text-gray-400">No Image</span>
+                        </div>
+                    @endif
                 </div>
             </div>
 
