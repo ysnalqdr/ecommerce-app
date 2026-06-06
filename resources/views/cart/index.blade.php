@@ -89,7 +89,7 @@
                             <span>Total</span>
                             <span>Rp {{ number_format($total, 0, ',', '.') }}</span>
                         </div>
-                        <a href="#"
+                        <a href="{{ route('order.checkout') }}"
                             class="block text-center bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 mt-6 transition">
                             Checkout
                         </a>
