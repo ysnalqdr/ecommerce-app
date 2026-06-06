@@ -63,14 +63,19 @@
                 {{-- Tombol Aksi --}}
                 @auth
                     <div class="flex gap-3">
-                        <button
-                            class="flex-1 bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition">
-                            + Keranjang
-                        </button>
-                        <button
-                            class="flex-1 border border-indigo-600 text-indigo-600 py-2 rounded-lg font-semibold hover:bg-indigo-50 transition">
-                            Beli Sekarang
-                        </button>
+                        <form method="POST" action="{{ route('cart.add') }}">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit"
+                                class="flex-1 bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition">
+                                + Keranjang
+                            </button>
+                        </form>
+                        <a href="{{ route('cart.index') }}"
+                            class="flex-1 border border-indigo-600 text-indigo-600 py-2 rounded-lg font-semibold hover:bg-indigo-50 transition text-center">
+                            Lihat Keranjang
+                        </a>
                     </div>
                 @else
                     <a href="{{ route('login') }}"
