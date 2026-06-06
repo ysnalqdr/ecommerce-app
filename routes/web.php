@@ -6,6 +6,7 @@ use App\Http\Controllers\SellerRegistrationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\Seller\ProductController as SellerProductController;
 use Illuminate\Support\Facades\Route;
@@ -54,6 +55,15 @@ use Illuminate\Support\Facades\Route;
     Route::get('/products/{id}/edit', [SellerProductController::class, 'edit'])->name('products.edit');
     Route::put('/products/{id}', [SellerProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{id}', [SellerProductController::class, 'destroy'])->name('products.destroy');
+});
+
+    // Admin Routes
+    Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::post('/seller/{id}/approve', [AdminController::class, 'approveSeller'])->name('seller.approve');
+    Route::post('/seller/{id}/reject', [AdminController::class, 'rejectSeller'])->name('seller.reject');
+    Route::get('/users', [AdminController::class, 'users'])->name('users');
+    Route::get('/products', [AdminController::class, 'products'])->name('products');
 });
 
 require __DIR__ . '/auth.php';
