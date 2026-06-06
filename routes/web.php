@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/order/{id}/payment', [OrderController::class, 'payment'])->name('order.payment');
 
     // Daftar Seller
     Route::get('/seller/register', [SellerRegistrationController::class, 'create'])->name('seller.register');
