@@ -14,6 +14,10 @@ class Product extends Model
         'name',
         'description',
         'price',
+        'original_price',
+        'discount_percent',
+        'total_sold',
+        'badge',
         'stock',
         'category',
     ];
