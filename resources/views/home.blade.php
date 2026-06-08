@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,6 @@
     <style>
         * { font-family: 'Plus Jakarta Sans', sans-serif; }
 
-        /* Page load animation */
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -28,16 +28,9 @@
             transition: transform 0.25s ease, box-shadow 0.25s ease;
             cursor: pointer;
         }
-        .product-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 16px 32px rgba(0,0,0,0.1);
-        }
-        .product-card:active {
-            transform: scale(0.97);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
+        .product-card:hover { transform: translateY(-6px); box-shadow: 0 16px 32px rgba(0,0,0,0.1); }
+        .product-card:active { transform: scale(0.97); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
 
-        /* Staggered animation delay */
         .product-card:nth-child(1) { animation-delay: 0.05s; }
         .product-card:nth-child(2) { animation-delay: 0.1s; }
         .product-card:nth-child(3) { animation-delay: 0.15s; }
@@ -51,37 +44,34 @@
         .product-card:nth-child(11) { animation-delay: 0.55s; }
         .product-card:nth-child(12) { animation-delay: 0.6s; }
 
-        .category-card {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .category-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.08);
-        }
+        .category-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .category-card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.08); }
 
-        .img-zoom img {
-            transition: transform 0.4s ease;
-        }
-        .img-zoom:hover img {
-            transform: scale(1.08);
-        }
+        .img-zoom img { transition: transform 0.4s ease; }
+        .img-zoom:hover img { transform: scale(1.08); }
 
         .nav-dropdown:hover .nav-menu { display: block; }
 
-        .badge-official {
-            background: linear-gradient(90deg, #f59e0b, #ef4444);
+        .badge-official { background: linear-gradient(90deg, #f59e0b, #ef4444); }
+        .badge-local { background: linear-gradient(90deg, #10b981, #059669); }
+        .flash-badge { background: linear-gradient(90deg, #ef4444, #f97316); }
+        .hero-bg { background: linear-gradient(135deg, #f8faff 0%, #eef2ff 60%, #f3f4f6 100%); }
+
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
-        .badge-local {
-            background: linear-gradient(90deg, #10b981, #059669);
-        }
-        .flash-badge {
-            background: linear-gradient(90deg, #ef4444, #f97316);
-        }
-        .hero-bg {
-            background: linear-gradient(135deg, #f8faff 0%, #eef2ff 60%, #f3f4f6 100%);
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
+
 <body class="bg-gray-50">
 
     {{-- Navbar --}}
@@ -174,55 +164,81 @@
     </div>
 
     {{-- Kategori --}}
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 reveal">
         <h2 class="text-lg font-bold text-gray-900 mb-5">Kategori</h2>
-        <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
-            @foreach($categories as $category)
-                <a href="#produk" class="category-card flex flex-col items-center gap-2 bg-white rounded-2xl p-3 border border-gray-100">
-                    <div class="w-11 h-11 bg-indigo-50 rounded-xl flex items-center justify-center text-xl">
-                        @if(str_contains(strtolower($category), 'fashion') || str_contains(strtolower($category), 'baju') || str_contains(strtolower($category), 'kaos'))👕
-                        @elseif(str_contains(strtolower($category), 'sepatu'))👟
-                        @elseif(str_contains(strtolower($category), 'tas'))👜
-                        @elseif(str_contains(strtolower($category), 'elektronik'))📱
-                        @elseif(str_contains(strtolower($category), 'aksesoris'))⌚
-                        @else🛒
-                        @endif
+        <div class="overflow-x-auto scrollbar-hide">
+            <div class="flex gap-3 pb-2" style="width: max-content; height: 180px;">
+                @php
+                    $categoryList = $categories->values();
+                    $chunks = $categoryList->chunk(2);
+                @endphp
+                @foreach($chunks as $chunk)
+                    <div class="flex flex-col gap-3 justify-start">
+                        @foreach($chunk as $category)
+                            <a href="#produk" class="category-card flex flex-col items-center justify-center gap-1 bg-white rounded-2xl border border-gray-100 w-20 h-20 flex-shrink-0">
+                                <div class="text-2xl">
+                                    @if(str_contains(strtolower($category), 'fashion') || str_contains(strtolower($category), 'baju') || str_contains(strtolower($category), 'kaos'))
+                                        👕
+                                    @elseif(str_contains(strtolower($category), 'sepatu'))
+                                        👟
+                                    @elseif(str_contains(strtolower($category), 'tas'))
+                                        👜
+                                    @elseif(str_contains(strtolower($category), 'elektronik'))
+                                        📱
+                                    @elseif(str_contains(strtolower($category), 'aksesoris'))
+                                        ⌚
+                                    @else
+                                        🛒
+                                    @endif
+                                </div>
+                                <span class="text-xs text-gray-600 text-center font-medium leading-tight px-1">{{ $category }}</span>
+                            </a>
+                        @endforeach
                     </div>
-                    <span class="text-xs text-gray-600 text-center font-medium leading-tight">{{ $category }}</span>
-                </a>
-            @endforeach
+                @endforeach
+            </div>
         </div>
     </div>
 
     {{-- Flash Sale --}}
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 reveal">
         <div class="bg-white rounded-2xl border border-gray-100 p-6">
             <div class="flex items-center gap-3 mb-5">
                 <span class="flash-badge text-white text-xs font-bold px-3 py-1.5 rounded-lg">⚡ FLASH SALE</span>
                 <span class="text-sm text-gray-400">Harga terbaik hari ini</span>
             </div>
-            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
-                @foreach($flashSale as $product)
-                    <a href="{{ route('product.show', $product->id) }}" class="product-card block group bg-white rounded-xl border border-gray-100 overflow-hidden">
-                        <div class="relative img-zoom h-28 overflow-hidden bg-gray-50">
-                            @if($product->discount_percent > 0)
-                                <span class="absolute top-1.5 right-1.5 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-md z-10">-{{ $product->discount_percent }}%</span>
-                            @endif
-                            @if($product->primaryImage)
-                                <img src="{{ Storage::url($product->primaryImage->image_url) }}" class="w-full h-full object-cover">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center text-gray-300 text-xs">No Image</div>
-                            @endif
-                        </div>
-                        <div class="p-2">
-                            <p class="text-xs text-gray-800 truncate font-medium">{{ $product->name }}</p>
-                            <p class="text-xs text-red-500 font-bold mt-0.5">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                            @if($product->original_price)
-                                <p class="text-xs text-gray-400 line-through">Rp {{ number_format($product->original_price, 0, ',', '.') }}</p>
-                            @endif
-                        </div>
-                    </a>
-                @endforeach
+            <div class="overflow-x-auto scrollbar-hide">
+                <div class="flex gap-3 pb-2" style="width: max-content;">
+                    @foreach($flashSale as $product)
+                        <a href="{{ route('product.show', $product->id) }}" class="product-card block group bg-white rounded-xl border border-gray-100 overflow-hidden flex-shrink-0" style="width: 130px;">
+                            <div class="relative img-zoom overflow-hidden bg-gray-50" style="height: 120px;">
+                                @if($product->discount_percent > 0)
+                                    <span class="absolute top-1.5 right-1.5 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-md z-10">-{{ $product->discount_percent }}%</span>
+                                @endif
+                                @if($product->badge === 'official')
+                                    <span class="absolute top-1.5 left-1.5 badge-official text-white text-xs font-bold px-1.5 py-0.5 rounded-md z-10">Mall</span>
+                                @elseif($product->badge === 'local')
+                                    <span class="absolute top-1.5 left-1.5 badge-local text-white text-xs font-bold px-1.5 py-0.5 rounded-md z-10">Lokal</span>
+                                @endif
+                                @if($product->primaryImage)
+                                    <img src="{{ Storage::url($product->primaryImage->image_url) }}" class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center text-gray-300 text-xs">No Image</div>
+                                @endif
+                            </div>
+                            <div class="p-2">
+                                <p class="text-xs text-gray-800 truncate font-medium">{{ $product->name }}</p>
+                                <p class="text-xs text-red-500 font-bold mt-0.5">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                                @if($product->original_price)
+                                    <p class="text-xs text-gray-400 line-through">Rp {{ number_format($product->original_price, 0, ',', '.') }}</p>
+                                @endif
+                                @if($product->total_sold > 0)
+                                    <p class="text-xs text-gray-400 mt-0.5">{{ $product->total_sold >= 1000 ? number_format($product->total_sold/1000, 1).'rb' : $product->total_sold }} terjual</p>
+                                @endif
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
@@ -230,47 +246,45 @@
     {{-- Rekomendasi --}}
     @auth
         @if($recommendations->isNotEmpty())
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 reveal">
                 <div class="bg-white rounded-2xl border border-gray-100 p-6">
                     <div class="flex items-center gap-2 mb-5">
                         <span class="text-lg">🎯</span>
                         <h2 class="text-lg font-bold text-gray-900">Rekomendasi Untukmu</h2>
                         <span class="text-xs text-gray-400 ml-1">Berdasarkan riwayat browsing kamu</span>
                     </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
-                        @foreach($recommendations as $product)
-                            <a href="{{ route('product.show', $product->id) }}" class="product-card block group bg-white rounded-xl border border-gray-100 overflow-hidden">
-                                <div class="relative img-zoom h-28 overflow-hidden bg-gray-50">
-                                    {{-- Discount Badge --}}
-                                    @if($product->discount_percent > 0)
-                                        <span class="absolute top-1.5 right-1.5 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-md z-10">-{{ $product->discount_percent }}%</span>
-                                    @endif
-                                    {{-- Store Badge --}}
-                                    @if($product->badge === 'official')
-                                        <span class="absolute top-1.5 left-1.5 badge-official text-white text-xs font-bold px-1.5 py-0.5 rounded-md z-10">Mall</span>
-                                    @elseif($product->badge === 'local')
-                                        <span class="absolute top-1.5 left-1.5 badge-local text-white text-xs font-bold px-1.5 py-0.5 rounded-md z-10">Lokal</span>
-                                    @endif
-                                    @if($product->primaryImage)
-                                        <img src="{{ Storage::url($product->primaryImage->image_url) }}" class="w-full h-full object-cover">
-                                    @else
-                                        <div class="w-full h-full flex items-center justify-center text-gray-300 text-xs">No Image</div>
-                                    @endif
-                                </div>
-                                <div class="p-2">
-                                    <p class="text-xs text-gray-800 truncate font-medium">{{ $product->name }}</p>
-                                    <p class="text-xs text-indigo-600 font-bold mt-0.5">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                                    @if($product->original_price)
-                                        <p class="text-xs text-gray-400 line-through">Rp {{ number_format($product->original_price, 0, ',', '.') }}</p>
-                                    @endif
-                                    @if($product->total_sold > 0)
-                                        <p class="text-xs text-gray-400 mt-0.5">
-                                            {{ $product->total_sold >= 1000 ? number_format($product->total_sold/1000, 1).'rb' : $product->total_sold }} terjual
-                                        </p>
-                                    @endif
-                                </div>
-                            </a>
-                        @endforeach
+                    <div class="overflow-x-auto scrollbar-hide">
+                        <div class="flex gap-3 pb-2" style="width: max-content;">
+                            @foreach($recommendations as $product)
+                                <a href="{{ route('product.show', $product->id) }}" class="product-card block group bg-white rounded-xl border border-gray-100 overflow-hidden flex-shrink-0" style="width: 130px;">
+                                    <div class="relative img-zoom overflow-hidden bg-gray-50" style="height: 120px;">
+                                        @if($product->discount_percent > 0)
+                                            <span class="absolute top-1.5 right-1.5 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-md z-10">-{{ $product->discount_percent }}%</span>
+                                        @endif
+                                        @if($product->badge === 'official')
+                                            <span class="absolute top-1.5 left-1.5 badge-official text-white text-xs font-bold px-1.5 py-0.5 rounded-md z-10">Mall</span>
+                                        @elseif($product->badge === 'local')
+                                            <span class="absolute top-1.5 left-1.5 badge-local text-white text-xs font-bold px-1.5 py-0.5 rounded-md z-10">Lokal</span>
+                                        @endif
+                                        @if($product->primaryImage)
+                                            <img src="{{ Storage::url($product->primaryImage->image_url) }}" class="w-full h-full object-cover">
+                                        @else
+                                            <div class="w-full h-full flex items-center justify-center text-gray-300 text-xs">No Image</div>
+                                        @endif
+                                    </div>
+                                    <div class="p-2">
+                                        <p class="text-xs text-gray-800 truncate font-medium">{{ $product->name }}</p>
+                                        <p class="text-xs text-indigo-600 font-bold mt-0.5">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                                        @if($product->original_price)
+                                            <p class="text-xs text-gray-400 line-through">Rp {{ number_format($product->original_price, 0, ',', '.') }}</p>
+                                        @endif
+                                        @if($product->total_sold > 0)
+                                            <p class="text-xs text-gray-400 mt-0.5">{{ $product->total_sold >= 1000 ? number_format($product->total_sold/1000, 1).'rb' : $product->total_sold }} terjual</p>
+                                        @endif
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </div>
@@ -278,17 +292,15 @@
     @endauth
 
     {{-- Semua Produk --}}
-    <div id="produk" class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+    <div id="produk" class="max-w-7xl mx-auto px-4 sm:px-6 py-6 reveal">
         <h2 class="text-lg font-bold text-gray-900 mb-5">Produk Terbaru</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
             @foreach($products as $product)
                 <a href="{{ route('product.show', $product->id) }}" class="product-card bg-white rounded-2xl border border-gray-100 overflow-hidden block group">
                     <div class="relative img-zoom h-40 overflow-hidden bg-gray-50">
-                        {{-- Discount Badge --}}
                         @if($product->discount_percent > 0)
                             <span class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-md z-10">-{{ $product->discount_percent }}%</span>
                         @endif
-                        {{-- Store Badge --}}
                         @if($product->badge === 'official')
                             <span class="absolute top-2 left-2 badge-official text-white text-xs font-bold px-2 py-0.5 rounded-md z-10">Mall</span>
                         @elseif($product->badge === 'local')
@@ -309,9 +321,7 @@
                             @endif
                         </div>
                         @if($product->total_sold > 0)
-                            <p class="text-xs text-gray-400 mt-1">
-                                {{ $product->total_sold >= 1000 ? number_format($product->total_sold/1000, 1).'rb' : $product->total_sold }} terjual
-                            </p>
+                            <p class="text-xs text-gray-400 mt-1">{{ $product->total_sold >= 1000 ? number_format($product->total_sold/1000, 1).'rb' : $product->total_sold }} terjual</p>
                         @endif
                     </div>
                 </a>
@@ -357,6 +367,26 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        reveals.forEach(el => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight) {
+                el.classList.add('visible');
+            } else {
+                observer.observe(el);
+            }
+        });
+    </script>
 
 </body>
 </html>
