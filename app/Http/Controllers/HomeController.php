@@ -13,16 +13,23 @@ class HomeController extends Controller
         // Produk terbaru
         $products = Product::with('primaryImage')->latest()->take(12)->get();
 
-        // Produk per kategori untuk section kategori
-        $categories = Product::select('category')
-            ->distinct()
-            ->pluck('category');
+        // Kategori dengan gambar produk pertama
+        $categories = Product::with('primaryImage')
+            ->select('category')
+            ->selectRaw('MIN(id) as first_product_id')
+            ->groupBy('category')
+            ->get()
+            ->map(function ($item) {
+                $product = Product::with('primaryImage')->find($item->first_product_id);
+                return [
+                    'name' => $item->category,
+                    'image' => $product?->primaryImage?->image_url,
+                ];
+            });
 
-        // Rekomendasi berdasarkan riwayat view user
+        // Rekomendasi
         $recommendations = collect();
-
         if (Auth::check()) {
-            // Ambil kategori yang paling sering dilihat user
             $favoriteCategories = ProductView::where('user_id', Auth::id())
                 ->select('category')
                 ->groupBy('category')
@@ -39,7 +46,7 @@ class HomeController extends Controller
             }
         }
 
-        // Flash sale — ambil 8 produk dengan harga tertinggi sebagai simulasi
+        // Flash sale
         $flashSale = Product::with('primaryImage')
             ->orderBy('price', 'desc')
             ->take(8)
